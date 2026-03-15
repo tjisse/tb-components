@@ -1,0 +1,19 @@
+<tb-data-grid
+  [data]="data()"
+  [totalItems]="totalItems()"
+  [urlSync]="urlSync()"
+  [urlPrefix]="urlPrefix()"
+  [initialQuery]="initialQuery()"
+  [fixedHeight]="fixedHeight()"
+  [selectable]="selectable()"
+  [loading]="loading()"
+  [loadingThreshold]="loadingThreshold()"
+  [pageSizeOptions]="pageSizeOptions()"
+  [rowIdKey]="rowIdKey()"
+  [error]="error()"
+  (queryChange)="queryChange.emit($event)"
+  (selectionChange)="selectionChange.emit($event)"
+  (retry)="retry.emit()"
+>
+  <ng-content />
+</tb-data-grid>

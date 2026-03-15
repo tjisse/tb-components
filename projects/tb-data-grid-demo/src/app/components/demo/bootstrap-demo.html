@@ -1,0 +1,41 @@
+<div class="container py-4">
+  <section class="mb-5">
+    <div style="position: relative">
+      <tb-data-grid-bootstrap
+        [data]="users()"
+        [totalItems]="totalElements()"
+        [urlPrefix]="'b'"
+        [initialQuery]="gridQuery()"
+        [selectable]="true"
+        [loading]="userResource.isLoading()"
+        [error]="errorState()"
+        [pageSizeOptions]="[5, 10, 25, 50]"
+        (queryChange)="onQueryChange($event)"
+        (selectionChange)="onSelectionChange($event)"
+        (retry)="userResource.reload()"
+      >
+        <tb-grid-column key="id" header="ID" width="80px" [sortable]="true" [filterable]="true" />
+        <tb-grid-column key="name" header="Name" [sortable]="true" [filterable]="true" />
+        <tb-grid-column key="address.city" header="City" [sortable]="true" [filterable]="true" />
+
+        <tb-grid-column key="email" header="Email" [sortable]="true" [filterable]="true">
+          <ng-template let-value>
+            <a [href]="'mailto:' + value" class="text-primary">{{ value }}</a>
+          </ng-template>
+        </tb-grid-column>
+
+        <tb-grid-column
+          key="role"
+          header="Role"
+          [filterable]="true"
+          [filterOptions]="[
+            { label: 'Admin', value: 'Admin' },
+            { label: 'User', value: 'User' },
+            { label: 'Editor', value: 'Editor' },
+            { label: 'Guest', value: 'Guest' },
+          ]"
+        />
+      </tb-data-grid-bootstrap>
+    </div>
+  </section>
+</div>

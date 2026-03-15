@@ -1,0 +1,37 @@
+<header class="app-header">
+  <nav class="main-nav">
+    <a routerLink="/vanilla" routerLinkActive="active">Vanilla Grid</a>
+    <a routerLink="/bootstrap" routerLinkActive="active">Bootstrap Grid</a>
+  </nav>
+</header>
+
+<div class="demo-controls">
+  <div class="sim-controls">
+    <label>
+      <input
+        type="checkbox"
+        [ngModel]="demo.isDelayed()"
+        (ngModelChange)="demo.isDelayed.set($event)"
+      />
+      Simulate Delay
+    </label>
+    <label class="error-label">
+      <input
+        type="checkbox"
+        [ngModel]="demo.isError()"
+        (ngModelChange)="demo.isError.set($event)"
+      />
+      Simulate Error
+    </label>
+  </div>
+
+  <div class="action-controls">
+    <button class="bulk-btn" [disabled]="isActionDisabled()" (click)="demo.performBulkAction()">
+      Perform Bulk Action ({{ selectedCount() }})
+    </button>
+  </div>
+</div>
+
+<main>
+  <router-outlet />
+</main>

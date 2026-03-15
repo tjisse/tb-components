@@ -1,59 +1,54 @@
 # TbComponents
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
+A modern Angular workspace for high-quality UI components. This project uses [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10 and is managed with `pnpm`.
 
-## Development server
+## 📂 Project Structure
 
-To start a local development server, run:
+- **`projects/tb-data-grid`**: The core library. A high-performance, signals-first data grid for Angular 20+.
+- **`projects/tb-data-grid-demo`**: A showcase application that demonstrates the grid's features (Vanilla and Bootstrap variants).
 
-```bash
-ng serve
-```
+## 🚀 Getting Started
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Prerequisites
 
-## Code scaffolding
+Ensure you have [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/) installed.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Development Server
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+To start the demo application:
 
 ```bash
-ng generate --help
+pnpm start
 ```
 
-## Building
+Navigate to `http://localhost:4200/` to view the demo.
 
-To build the project run:
+### Building the Library
+
+To build the `tb-data-grid` library for production:
 
 ```bash
-ng build
+ng build tb-data-grid
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The artifacts will be stored in the `dist/tb-data-grid` directory.
 
-## Running unit tests
+### Running Tests
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+To run unit tests (Vitest):
 
 ```bash
-ng test
+pnpm test
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+To run end-to-end (E2E) tests (Playwright):
 
 ```bash
-ng e2e
+pnpm e2e
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Use `pnpm e2e:ui` to run tests in the interactive Playwright UI mode.
 
-## Additional Resources
+## 📄 License
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+MIT

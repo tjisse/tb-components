@@ -1,0 +1,230 @@
+@import 'pkg:bootstrap/scss/functions';
+@import 'pkg:bootstrap/scss/variables';
+@import 'pkg:bootstrap/scss/maps';
+@import 'pkg:bootstrap/scss/mixins';
+
+:host {
+  display: block;
+
+  // Use Bootstrap's own CSS variables for theming.
+  --tb-grid-border-color: var(--#{$prefix}border-color);
+  --tb-grid-header-bg: var(--#{$prefix}tertiary-bg);
+  --tb-grid-row-hover: var(--#{$prefix}tertiary-bg);
+  --tb-grid-row-selected: #{tint-color($primary, 90%)};
+  --tb-grid-footer-bg: var(--#{$prefix}tertiary-bg);
+}
+
+::ng-deep {
+  .tb-grid-container {
+    border: var(--#{$prefix}border-width) solid var(--#{$prefix}border-color);
+    border-radius: var(--#{$prefix}border-radius);
+    overflow: hidden;
+    background-color: var(--#{$prefix}body-bg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tb-grid-header {
+    background-color: var(--#{$prefix}tertiary-bg);
+    border-bottom: calc(var(--#{$prefix}border-width) * 2) solid var(--#{$prefix}border-color);
+  }
+
+  .tb-grid-header-cell {
+    font-weight: $font-weight-bold;
+    color: var(--#{$prefix}body-color);
+    padding: $table-cell-padding-y $table-cell-padding-x;
+  }
+
+  .tb-grid-row {
+    border-bottom: var(--#{$prefix}border-width) solid var(--#{$prefix}border-color);
+    background-color: var(--#{$prefix}body-bg);
+    transition: background-color 0.15s ease-in-out;
+
+    &:hover:not(.selected) {
+      background-color: var(--#{$prefix}secondary-bg);
+    }
+
+    &.selected {
+      background-color: var(--tb-grid-row-selected);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .tb-grid-cell {
+    color: var(--#{$prefix}body-color);
+    padding: $table-cell-padding-y $table-cell-padding-x;
+
+    &.tb-is-expanded .tb-cell-content {
+      background-color: var(--#{$prefix}body-bg);
+    }
+  }
+
+  .selection-cell input[type='checkbox'] {
+    width: 1em;
+    height: 1em;
+    vertical-align: top;
+    background-color: var(--#{$prefix}body-bg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: var(--#{$prefix}border-width) solid var(--#{$prefix}border-color);
+    appearance: none;
+    print-color-adjust: exact;
+    border-radius: 0.25em;
+    transition:
+      background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out;
+    cursor: pointer;
+
+    &:checked {
+      background-color: $primary;
+      border-color: $primary;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+    }
+
+    &:indeterminate {
+      background-color: $primary;
+      border-color: $primary;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
+    }
+  }
+
+  .tb-grid-footer {
+    padding: $card-cap-padding-y $card-cap-padding-x;
+    background-color: var(--#{$prefix}tertiary-bg);
+    border-top: var(--#{$prefix}border-width) solid var(--#{$prefix}border-color);
+
+    &:last-child {
+      @include border-bottom-radius($card-inner-border-radius);
+    }
+  }
+
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .pagination-text {
+      margin-bottom: 0;
+      font-size: $font-size-sm;
+      color: var(--#{$prefix}secondary-color);
+    }
+
+    .pagination-group {
+      position: relative;
+      display: inline-flex;
+      vertical-align: middle;
+      gap: 0 !important; // Overridden to 0 for grouping
+
+      button {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: $font-weight-normal;
+        line-height: 1;
+        color: var(--#{$prefix}secondary-color);
+        text-align: center;
+        text-decoration: none;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        background-color: transparent;
+        border: var(--#{$prefix}border-width) solid var(--#{$prefix}secondary-border-subtle);
+        padding: 0;
+        font-size: $btn-font-size-sm;
+        transition:
+          color 0.15s ease-in-out,
+          background-color 0.15s ease-in-out,
+          border-color 0.15s ease-in-out,
+          box-shadow 0.15s ease-in-out;
+
+        &:hover:not(:disabled) {
+          color: var(--#{$prefix}emphasis-color);
+          background-color: var(--#{$prefix}secondary-bg);
+          border-color: var(--#{$prefix}secondary-border-subtle);
+          z-index: 2;
+        }
+
+        &:focus {
+          z-index: 3;
+          outline: 0;
+        }
+
+        &:disabled {
+          opacity: 0.65;
+          cursor: not-allowed;
+        }
+
+        &:not(:first-child) {
+          margin-left: calc(var(--#{$prefix}border-width) * -1);
+          @include border-start-radius(0);
+        }
+
+        &:not(:last-child) {
+          @include border-end-radius(0);
+        }
+
+        &:first-child {
+          @include border-start-radius(var(--#{$prefix}border-radius-sm));
+        }
+
+        &:last-child {
+          @include border-end-radius(var(--#{$prefix}border-radius-sm));
+        }
+      }
+    }
+  }
+
+  .page-size-selector select {
+    display: inline-block;
+    width: auto;
+    padding: $form-select-padding-y-sm $form-select-indicator-padding $form-select-padding-y-sm
+      $form-select-padding-x-sm;
+    font-size: $form-select-font-size-sm;
+    font-weight: $form-select-font-weight;
+    line-height: $form-select-line-height;
+    color: var(--#{$prefix}body-color);
+    background-color: var(--#{$prefix}body-bg);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right $form-select-padding-x-sm center;
+    background-size: $form-select-bg-size;
+    border: var(--#{$prefix}border-width) solid var(--#{$prefix}border-color);
+    border-radius: var(--#{$prefix}border-radius-sm);
+    transition:
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
+    appearance: none;
+
+    &:focus {
+      border-color: tint-color($primary, 50%);
+      outline: 0;
+      box-shadow: $form-select-focus-box-shadow;
+    }
+  }
+
+  .page-size-selector label,
+  .pagination-controls span {
+    margin-bottom: 0;
+    margin-right: 0.5rem;
+    font-size: $font-size-sm;
+    color: var(--#{$prefix}secondary-color);
+  }
+
+  .sort-btn {
+    color: var(--#{$prefix}secondary-color);
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.875rem;
+    cursor: pointer;
+
+    &.active {
+      color: var(--#{$prefix}primary);
+    }
+  }
+}

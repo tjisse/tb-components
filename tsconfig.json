@@ -13,7 +13,12 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "preserve",
+    "paths": {
+      "tb-data-grid": [
+        "./projects/tb-data-grid/src/public-api.ts"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -22,5 +27,19 @@
     "typeCheckHostBindings": true,
     "strictTemplates": true
   },
-  "files": []
+  "files": [],
+  "references": [
+    {
+      "path": "./projects/tb-data-grid/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/tb-data-grid/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/tb-data-grid-demo/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/tb-data-grid-demo/tsconfig.spec.json"
+    }
+  ]
 }

@@ -3,5 +3,119 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
+    "tb-data-grid": {
+      "projectType": "library",
+      "root": "projects/tb-data-grid",
+      "sourceRoot": "projects/tb-data-grid/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/tb-data-grid/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/tb-data-grid/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "runner": "vitest",
+            "tsConfig": "projects/tb-data-grid/tsconfig.spec.json",
+            "buildTarget": "::development"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/tb-data-grid/**/*.ts",
+              "projects/tb-data-grid/**/*.html"
+            ],
+            "eslintConfig": "projects/tb-data-grid/eslint.config.js"
+          }
+        }
+      }
+    },
+    "tb-data-grid-demo": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/tb-data-grid-demo",
+      "sourceRoot": "projects/tb-data-grid-demo/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "projects/tb-data-grid-demo/src/main.ts",
+            "tsConfig": "projects/tb-data-grid-demo/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/tb-data-grid-demo/public"
+              }
+            ],
+            "styles": ["projects/tb-data-grid-demo/src/styles.scss"]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "tb-data-grid-demo:build:production"
+            },
+            "development": {
+              "buildTarget": "tb-data-grid-demo:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular/build:extract-i18n"
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/tb-data-grid-demo/**/*.ts",
+              "projects/tb-data-grid-demo/**/*.html"
+            ],
+            "eslintConfig": "projects/tb-data-grid-demo/eslint.config.js"
+          }
+        }
+      }
+    }
   }
 }

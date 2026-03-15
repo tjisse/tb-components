@@ -1,0 +1,214 @@
+<div class="tb-grid-container" role="grid">
+  <div class="tb-grid-header" role="rowgroup">
+    <div class="tb-grid-row" role="row">
+      @if (selectable()) {
+        <div class="tb-grid-header-cell selection-cell">
+          <input
+            type="checkbox"
+            [checked]="isPageSelected()"
+            [indeterminate]="isPagePartiallySelected()"
+            (click)="togglePageSelection($event)"
+          />
+        </div>
+      }
+      @for (col of columns(); track col.key) {
+        <div
+          class="tb-grid-header-cell"
+          role="columnheader"
+          [style.width]="col.width"
+          [class.sortable]="col.sortable"
+          [attr.aria-sort]="getAriaSort(col.key)"
+          [tabindex]="col.sortable ? 0 : -1"
+          (click)="toggleSort(col)"
+          (keydown.enter)="toggleSort(col)"
+          (keydown.space)="toggleSort(col)"
+          tbGridTruncated
+        >
+          <div class="tb-cell-content">
+            <div class="header-content">
+              <span class="header-text">{{ col.header }}</span>
+              <div class="header-actions">
+                @if (col.sortable) {
+                  <button
+                    type="button"
+                    class="sort-btn"
+                    [class.active]="isSortActive(col.key)"
+                    [title]="t.sorting.header(col.header)"
+                  >
+                    <span [class]="getSortIconClass(col.key)"></span>
+                  </button>
+                }
+                @if (col.filterable) {
+                  <tb-grid-filter
+                    [column]="col"
+                    [currentFilter]="getFilter(col.key)"
+                    (filterChange)="onFilterChange(col.key, $event)"
+                    (click)="$event.stopPropagation()"
+                  />
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (showSelectAllBanner() || selection().allInDataset) {
+    <div class="select-all-banner" @bannerAnimation>
+      <div class="banner-inner">
+        @if (showSelectAllBanner()) {
+          {{ t.selection.pageSelected(data().length) }}
+          <button (click)="selectAllInDataset()">
+            {{ t.selection.selectAll(totalItems()) }}
+          </button>
+        } @else if (selection().allInDataset) {
+          {{ t.selection.allSelected(totalItems()) }}
+          <button (click)="clearSelection()">{{ t.selection.clearSelection }}</button>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="tb-grid-body" role="rowgroup">
+    <tb-grid-spinner [visible]="loading()" [threshold]="loadingThreshold()" />
+
+    @if (error() && !loading()) {
+      <div class="tb-error-overlay" @fade>
+        <div class="error-content">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>{{ t.error.message }}</span>
+          <button type="button" class="retry-btn" (click)="retry.emit()">
+            {{ t.error.retry }}
+          </button>
+        </div>
+      </div>
+    }
+
+    <div style="display: grid; position: relative">
+      @for (dataset of [data()]; track dataset) {
+        <div @crossFade style="grid-area: 1 / 1; min-width: 100%">
+          @if (!error()) {
+            @for (row of dataset; track getRowValue(row, rowIdKey())) {
+              <div
+                class="tb-grid-row"
+                role="row"
+                [class.selected]="isRowSelected(getRowValue(row, rowIdKey()))"
+              >
+                @if (selectable()) {
+                  <div class="tb-grid-cell selection-cell">
+                    <input
+                      type="checkbox"
+                      [checked]="isRowSelected(getRowValue(row, rowIdKey()))"
+                      (change)="toggleRowSelection(getRowValue(row, rowIdKey()))"
+                    />
+                  </div>
+                }
+                @for (col of columns(); track col.key) {
+                  <div
+                    class="tb-grid-cell"
+                    role="gridcell"
+                    [style.width]="col.width"
+                    tbGridTruncated
+                  >
+                    <div class="tb-cell-content">
+                      @if (getCustomTemplate(col.key); as template) {
+                        <ng-container
+                          *ngTemplateOutlet="
+                            template;
+                            context: { $implicit: getRowValue(row, col.key), row: row }
+                          "
+                        />
+                      } @else {
+                        {{ getRowValue(row, col.key) }}
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            } @empty {
+              @if (!loading()) {
+                <div class="tb-grid-row empty-msg">No data found</div>
+              }
+            }
+          }
+
+          @for (item of placeholderRows(); track $index) {
+            <div class="tb-grid-row placeholder-row" aria-hidden="true">
+              @if (selectable()) {
+                <div class="tb-grid-cell selection-cell"></div>
+              }
+              @for (col of columns(); track col.key) {
+                <div class="tb-grid-cell" [style.width]="col.width">
+                  <div class="tb-cell-content">&nbsp;</div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+  <div class="tb-grid-footer" role="rowgroup">
+    <div class="footer-left">
+      @if (pageSizeOptions().length > 0) {
+        <div class="page-size-selector">
+          <label for="tb-page-size">{{ t.pagination.itemsPerPage }}</label>
+          <select
+            id="tb-page-size"
+            [ngModel]="pageSize()"
+            (ngModelChange)="onPageSizeChange($event)"
+          >
+            @for (size of pageSizeOptions(); track size) {
+              <option [value]="size">{{ size }}</option>
+            }
+          </select>
+        </div>
+      }
+    </div>
+    <div class="pagination-controls">
+      <div class="pagination-group">
+        <button
+          [disabled]="isFirstPage()"
+          (click)="firstPage()"
+          [title]="t.pagination.first"
+          [class]="paginationButtonClass()"
+        >
+          <i class="fas fa-angle-double-left"></i>
+        </button>
+        <button
+          [disabled]="isFirstPage()"
+          (click)="prevPage()"
+          [title]="t.pagination.previous"
+          [class]="paginationButtonClass()"
+        >
+          <i class="fas fa-angle-left"></i>
+        </button>
+      </div>
+
+      <span class="pagination-text">{{
+        t.pagination.pageOf(currentPage() + 1, totalPages())
+      }}</span>
+
+      <div class="pagination-group">
+        <button
+          [disabled]="isLastPage()"
+          (click)="nextPage()"
+          [title]="t.pagination.next"
+          [class]="paginationButtonClass()"
+        >
+          <i class="fas fa-angle-right"></i>
+        </button>
+        <button
+          [disabled]="isLastPage()"
+          (click)="lastPage()"
+          [title]="t.pagination.last"
+          [class]="paginationButtonClass()"
+        >
+          <i class="fas fa-angle-double-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-content />

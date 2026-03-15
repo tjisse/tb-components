@@ -1,0 +1,63 @@
+<div class="tb-filter-container">
+  <button
+    type="button"
+    class="filter-btn"
+    [class.active]="isActive()"
+    (click)="toggleDropdown()"
+    cdkOverlayOrigin
+    #trigger="cdkOverlayOrigin"
+    [title]="t.filtering.header(column().header)"
+  >
+    <i class="fas fa-filter"></i>
+  </button>
+
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="trigger"
+    [cdkConnectedOverlayOpen]="isOpen()"
+    (overlayOutsideClick)="isOpen.set(false)"
+  >
+    <div class="filter-dropdown">
+      <div class="filter-header">
+        <span>{{ t.filtering.header(column().header) }}</span>
+      </div>
+
+      <div class="filter-body">
+        @if (column().filterOptions; as options) {
+          <!-- Multiselect Mode -->
+          <div class="filter-options-list">
+            @for (opt of options; track opt.value) {
+              <label class="filter-option-item">
+                <input
+                  type="checkbox"
+                  [checked]="isOptionSelected(opt.value)"
+                  (change)="toggleOption(opt.value)"
+                />
+                <span>{{ opt.label }}</span>
+              </label>
+            }
+          </div>
+        } @else {
+          <!-- Text Mode -->
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            [placeholder]="t.filtering.searchPlaceholder"
+            [ngModel]="tempValue()"
+            (ngModelChange)="tempValue.set($event)"
+            (keyup.enter)="apply()"
+          />
+        }
+      </div>
+
+      <div class="filter-footer">
+        <button type="button" class="btn btn-sm btn-link" (click)="clear()">
+          {{ t.filtering.clear }}
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" (click)="apply()">
+          {{ t.filtering.apply }}
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,11 @@
+# Ignore artifacts:
+dist
+node_modules
+.angular
+
+# Ignore project files
+pnpm-lock.yaml
+package.json
+tsconfig*.json
+.editorconfig
+README.md
