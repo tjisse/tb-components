@@ -2,7 +2,7 @@
 
 A modern Angular workspace for high-quality UI components. This project uses [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10 and is managed with `pnpm`.
 
-🌟 **[View the Live Demo on GitHub Pages!](https://<YOUR-USERNAME>.github.io/tb-components/)** 🌟 *(Replace `<YOUR-USERNAME>` with your actual GitHub username)*
+🌟 **[View the Live Demo on GitHub Pages!](https://tjisse.github.io/tb-components/)** 🌟
 
 ## 📂 Project Structure
 
