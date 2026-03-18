@@ -39,6 +39,9 @@ jobs:
       - name: Build
         run: pnpm exec ng build tb-data-grid-demo --configuration production --base-href /tb-components/
 
+      - name: Create 404 page for SPA routing
+        run: cp dist/tb-data-grid-demo/browser/index.html dist/tb-data-grid-demo/browser/404.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
