@@ -6,6 +6,7 @@ import {
   TbGridSelectionState,
   TbSpringDataService,
 } from 'tb-data-grid';
+import { environment } from '../../../environments/environment';
 import { DemoStateService } from '../../services/demo-state';
 
 interface User extends Record<string, unknown> {
@@ -38,7 +39,10 @@ export class VanillaDemoComponent {
     filters: {},
   });
 
-  userResource = this.springDataService.createResource<User>('/api/users', this.gridQuery);
+  userResource = this.springDataService.createResource<User>(
+    environment.apiBaseUrl + '/api/users',
+    this.gridQuery,
+  );
 
   private _users = signal<User[]>([]);
   private _totalElements = signal<number>(0);

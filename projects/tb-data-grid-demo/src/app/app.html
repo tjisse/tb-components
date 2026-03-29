@@ -6,24 +6,26 @@
 </header>
 
 <div class="demo-controls">
-  <div class="sim-controls">
-    <label>
-      <input
-        type="checkbox"
-        [ngModel]="demo.isDelayed()"
-        (ngModelChange)="demo.isDelayed.set($event)"
-      />
-      Simulate Delay
-    </label>
-    <label class="error-label">
-      <input
-        type="checkbox"
-        [ngModel]="demo.isError()"
-        (ngModelChange)="demo.isError.set($event)"
-      />
-      Simulate Error
-    </label>
-  </div>
+  @if (environment.useMockData) {
+    <div class="sim-controls">
+      <label>
+        <input
+          type="checkbox"
+          [ngModel]="demo.isDelayed()"
+          (ngModelChange)="demo.isDelayed.set($event)"
+        />
+        Simulate Delay
+      </label>
+      <label class="error-label">
+        <input
+          type="checkbox"
+          [ngModel]="demo.isError()"
+          (ngModelChange)="demo.isError.set($event)"
+        />
+        Simulate Error
+      </label>
+    </div>
+  }
 
   <div class="action-controls">
     <button class="bulk-btn" [disabled]="isActionDisabled()" (click)="demo.performBulkAction()">

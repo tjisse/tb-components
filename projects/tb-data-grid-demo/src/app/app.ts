@@ -1,6 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { environment } from '../environments/environment';
 import { DemoStateService } from './services/demo-state';
 
 @Component({
@@ -11,6 +12,7 @@ import { DemoStateService } from './services/demo-state';
 })
 export class App {
   protected demo = inject(DemoStateService);
+  protected environment = environment;
 
   selectedCount = computed(() => {
     const sel = this.demo.currentSelection();

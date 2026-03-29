@@ -67,40 +67,53 @@
             "styles": ["projects/tb-data-grid-demo/src/styles.scss"]
           },
           "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
-            }
+          "production": {
+            "budgets": [
+              {
+                "type": "initial",
+                "maximumWarning": "500kB",
+                "maximumError": "1MB"
+              },
+              {
+                "type": "anyComponentStyle",
+                "maximumWarning": "4kB",
+                "maximumError": "8kB"
+              }
+            ],
+            "outputHashing": "all"
+          },
+          "development": {
+            "optimization": false,
+            "extractLicenses": false,
+            "sourceMap": true
+          },
+          "backend": {
+            "optimization": false,
+            "extractLicenses": false,
+            "sourceMap": true,
+            "fileReplacements": [
+              {
+                "replace": "projects/tb-data-grid-demo/src/environments/environment.ts",
+                "with": "projects/tb-data-grid-demo/src/environments/environment.backend.ts"
+              }
+            ]
+          }
           },
           "defaultConfiguration": "production"
-        },
-        "serve": {
+          },
+          "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
-            "production": {
-              "buildTarget": "tb-data-grid-demo:build:production"
-            },
-            "development": {
-              "buildTarget": "tb-data-grid-demo:build:development"
-            }
+          "production": {
+            "buildTarget": "tb-data-grid-demo:build:production"
           },
-          "defaultConfiguration": "development"
+          "development": {
+            "buildTarget": "tb-data-grid-demo:build:development"
+          },
+          "backend": {
+            "buildTarget": "tb-data-grid-demo:build:backend"
+          }
+          },          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"

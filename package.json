@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:backend": "concurrently \"cd examples/tb-spring-data-api && ./mvnw spring-boot:run\" \"ng serve --configuration=backend\"",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
@@ -43,6 +44,7 @@
     "@typescript-eslint/type-utils": "^8.57.0",
     "@typescript-eslint/utils": "^8.57.0",
     "angular-eslint": "^20.7.0",
+    "concurrently": "^9.2.1",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
