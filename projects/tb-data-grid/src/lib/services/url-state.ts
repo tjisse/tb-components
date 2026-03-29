@@ -71,11 +71,19 @@ export class TbGridUrlService implements OnDestroy {
         const values = params.getAll(k);
         if (values.length > 0) {
           const allValues = values.flatMap((v) => v.split(','));
-          const isMultiselect = allValues.length > 1;
+
+          // Check if this filter already exists in current state to preserve operator
+          const currentFilter = currentQuery.filters[key];
+          let operator = currentFilter?.operator;
+
+          if (!operator) {
+            // Default logic: if it contains a comma or we have multiple values, it's 'in'
+            operator = allValues.length > 1 ? 'in' : 'contains';
+          }
 
           filters[key] = {
-            value: isMultiselect ? allValues : allValues[0],
-            operator: isMultiselect ? 'in' : 'contains',
+            value: allValues.length > 1 ? allValues : allValues[0],
+            operator: operator as TbFilterValue['operator'],
           };
         }
       });
@@ -86,8 +94,24 @@ export class TbGridUrlService implements OnDestroy {
       filters,
     };
 
-    // Only update if the meaningful state has actually changed
-    if (JSON.stringify(currentQuery) !== JSON.stringify(nextQuery)) {
+    // Deep compare helper
+    const stringifyForCompare = (obj: unknown) =>
+      JSON.stringify(obj, (key, value) => {
+        if (value instanceof Set) return Array.from(value).sort();
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+          return Object.keys(value)
+            .sort()
+            .reduce((sorted: Record<string, unknown>, k) => {
+              sorted[k] = (value as Record<string, unknown>)[k];
+              return sorted;
+            }, {});
+        }
+        return value;
+      });
+
+    const hasChanged = stringifyForCompare(currentQuery) !== stringifyForCompare(nextQuery);
+
+    if (hasChanged) {
       this.stateService.setStateFromUrl({ pageIndex, pageSize, sort, filters });
     }
   }
